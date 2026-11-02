@@ -1,0 +1,52 @@
+version: "3"
+
+vars:
+  MODULES: [loomserver, loomclient]
+
+tasks:
+  default:
+    desc: List available tasks
+    cmds:
+      - task --list
+
+  generate:
+    desc: Regenerate server and client code from api/openapi.yaml
+    cmds:
+      - for: { var: MODULES }
+        cmd: cd {{.ITEM}} && go generate ./...
+
+  build:
+    desc: Build both modules
+    cmds:
+      - for: { var: MODULES }
+        cmd: cd {{.ITEM}} && go build ./...
+
+  test:
+    desc: Run tests in both modules
+    cmds:
+      - for: { var: MODULES }
+        cmd: cd {{.ITEM}} && go test ./...
+
+  lint:
+    desc: Lint both modules with golangci-lint
+    cmds:
+      - for: { var: MODULES }
+        cmd: cd {{.ITEM}} && golangci-lint run ./...
+
+  tidy:
+    desc: Tidy both modules
+    cmds:
+      - for: { var: MODULES }
+        cmd: cd {{.ITEM}} && go mod tidy
+
+  run-server:
+    desc: Run the server on :8080
+    dir: loomserver
+    cmds:
+      - go run . -addr :8080
+
+  run-client:
+    desc: Run the client health check
+    dir: loomclient
+    cmds:
+      - go run . health

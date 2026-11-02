@@ -170,7 +170,7 @@ func envOr(key, fallback string) string {
 }
 
 func usage(fs *flag.FlagSet) {
-	fmt.Fprintf(fs.Output(), `Usage: loomclient [flags] <command> [args]
+	_, _ = fmt.Fprintf(fs.Output(), `Usage: loomclient [flags] <command> [args]
 
 Commands:
   health            Check server health

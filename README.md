@@ -12,6 +12,7 @@ The API stores texts and "weaves" them into fixed-width lines.
 ## Layout
 
 ```
+Taskfile.yml                    Task runner definitions
 api/
   openapi.yaml                  OpenAPI 3.0 specification
   oapi-codegen.server.yaml      server codegen config
@@ -31,10 +32,14 @@ loomclient/
 ## Requirements
 
 - Go 1.22 or newer (the workspace declares Go 1.27.3)
+- [Task](https://taskfile.dev) v3 for the task runner (`go install
+  github.com/go-task/task/v3/cmd/task@latest`)
 - Network access the first time the generator runs (it is pinned to
   `oapi-codegen` v2.8.2)
 - `golangci-lint` v2 for linting (`go install
   github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest`)
+
+Run `task --list` (or just `task`) to see all available tasks.
 
 ## Generate
 
@@ -42,7 +47,7 @@ The generated files are checked in. After editing `api/openapi.yaml`,
 regenerate both sides:
 
 ```bash
-make generate
+task generate
 ```
 
 This runs `go generate ./...` in each module, which invokes
@@ -53,7 +58,7 @@ This runs `go generate ./...` in each module, which invokes
 Start the server:
 
 ```bash
-make run-server
+task run-server
 # or: cd loomserver && go run . -addr :8080
 ```
 
@@ -93,7 +98,7 @@ Flags must come before the command.
 ## Tests
 
 ```bash
-make test
+task test
 ```
 
 ## Lint
@@ -103,5 +108,5 @@ The repository uses `golangci-lint` v2 with its default linter set
 `.golangci.yml`. Both modules are linted:
 
 ```bash
-make lint
+task lint
 ```

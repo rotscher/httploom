@@ -20,7 +20,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		var health api.Health
 		if err := json.NewDecoder(resp.Body).Decode(&health); err != nil {
@@ -42,7 +42,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		if err := json.NewDecoder(resp.Body).Decode(&created); err != nil {
 			t.Fatal(err)
@@ -63,7 +63,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		var got api.Weave
 		if err := json.NewDecoder(resp.Body).Decode(&got); err != nil {
@@ -79,7 +79,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		var list api.WeaveList
 		if err := json.NewDecoder(resp.Body).Decode(&list); err != nil {
@@ -95,7 +95,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		if resp.StatusCode != http.StatusBadRequest {
 			t.Fatalf("status = %d, want %d", resp.StatusCode, http.StatusBadRequest)
@@ -107,7 +107,7 @@ func TestAPI(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		if resp.StatusCode != http.StatusNotFound {
 			t.Fatalf("status = %d, want %d", resp.StatusCode, http.StatusNotFound)
