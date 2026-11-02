@@ -33,6 +33,8 @@ loomclient/
 - Go 1.22 or newer (the workspace declares Go 1.27.3)
 - Network access the first time the generator runs (it is pinned to
   `oapi-codegen` v2.8.2)
+- `golangci-lint` v2 for linting (`go install
+  github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest`)
 
 ## Generate
 
@@ -92,4 +94,14 @@ Flags must come before the command.
 
 ```bash
 make test
+```
+
+## Lint
+
+The repository uses `golangci-lint` v2 with its default linter set
+(`errcheck`, `govet`, `ineffassign`, `staticcheck`, `unused`), configured in
+`.golangci.yml`. Both modules are linted:
+
+```bash
+make lint
 ```

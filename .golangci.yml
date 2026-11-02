@@ -1,0 +1,6 @@
+version: "2"
+
+# Use golangci-lint's default set of linters:
+# errcheck, govet, ineffassign, staticcheck, unused.
+linters:
+  default: standard
