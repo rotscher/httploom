@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Loom API
+  version: 0.1.0
+  description: A tiny HTTP API that weaves text into fixed-width lines.
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Report server health
+      responses:
+        "200":
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Health"
+  /weaves:
+    get:
+      operationId: listWeaves
+      summary: List woven texts
+      responses:
+        "200":
+          description: All weaves created so far
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeaveList"
+    post:
+      operationId: createWeave
+      summary: Weave a text into fixed-width lines
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeaveRequest"
+      responses:
+        "201":
+          description: The newly created weave
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Weave"
+        "400":
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /weaves/{id}:
+    get:
+      operationId: getWeave
+      summary: Fetch a single weave
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Identifier of the weave
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The requested weave
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Weave"
+        "404":
+          description: Weave not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    Health:
+      type: object
+      required:
+        - status
+        - version
+      properties:
+        status:
+          type: string
+          example: ok
+        version:
+          type: string
+          example: 0.1.0
+    WeaveRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          minLength: 1
+          example: The quick brown fox jumps over the lazy dog
+        width:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 80
+          example: 20
+    Weave:
+      type: object
+      required:
+        - id
+        - text
+        - width
+        - createdAt
+      properties:
+        id:
+          type: string
+          example: 7f2c1a9e
+        text:
+          type: string
+          example: The quick brown fox
+        width:
+          type: integer
+          example: 20
+        createdAt:
+          type: string
+          format: date-time
+    WeaveList:
+      type: object
+      required:
+        - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Weave"
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: text must not be empty
